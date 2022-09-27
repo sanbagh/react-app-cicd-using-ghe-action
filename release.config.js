@@ -4,6 +4,6 @@ module.exports = {
   plugins: [
     "@semantic-release/commit-analyze",
     "@semantic-release/release-notes-generator",
-    "@semantic-release/github"
-  ]
+    "@semantic-release/github",
+  ],
 };
