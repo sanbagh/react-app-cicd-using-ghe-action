@@ -17,7 +17,7 @@ jobs:
         with:
           path: ~/.npm
           key: ${{runner.os}}-node-${{hashFiles('**/package-lock.json')}}
-          restore-key: |
+          restore-keys: |
             ${{runner.os}}-node-
       - name: Use node js
         uses: actions/setup-node@v1
@@ -31,9 +31,20 @@ jobs:
         run: npm test -- --coverage
         env:
           CI: true
+      - name: Upload code coverage
+        uses: actions/upload-artifact@v1
+        with:
+          name: code-coverage
+          path: coverage
       - name: Build project
         if: github.event_name == 'push'
         run: npm run build
+      - name: Upload build folder
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v1
+        with:
+          name: build
+          path: build
       - name: Deploy project
         if: github.event_name == 'push'
         run: npx surge --project ./build --domain wasteful-color.surge.sh
