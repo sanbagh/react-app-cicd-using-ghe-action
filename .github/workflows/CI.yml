@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      SURGE_LOGIN: ${{secrets.SURGE_LOGIN}}
+      SURGE_TOKEN: ${{secrets.SURGE_TOKEN}}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -50,9 +53,14 @@ jobs:
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      - name: Deploy project
-        if: github.event_name == 'push'
+      - name: Deploy project to staging
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
         run: npx surge --project ./build --domain wasteful-color.surge.sh
+      - name: Deploy project to production
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: npx surge --project ./build --domain wasteful-color.surge.sh
+      - name: Upload code coverage to codecov
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: npx codecov
         env:
-          SURGE_LOGIN: ${{secrets.SURGE_LOGIN}}
-          SURGE_TOKEN: ${{secrets.SURGE_TOKEN}}
+          CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
