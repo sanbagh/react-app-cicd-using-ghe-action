@@ -15,7 +15,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "format:check": "npx prettier -c \"**/*.{js, jsx, css, yml, ts, scss, yaml}\"",
+    "format": "npx prettier -w \"**/*.{js, jsx, css, yml, ts, scss, yaml}\""
   },
   "eslintConfig": {
     "extends": [
